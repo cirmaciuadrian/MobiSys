@@ -1,0 +1,138 @@
+﻿@model IEnumerable<MobiSys.Models.OrderDetails>
+
+@{
+    ViewData["Title"] = "Order Details";
+    Layout = "/Views/Shared/_Layout.cshtml";
+    bool ok = false;
+}
+
+
+    <div class="@TempData["Styling"]">
+        <p class="d-flex justify-content-center"> <strong> @TempData["DangerMsg"] @TempData["SuccessMsg"] </strong> </p>
+    </div>
+
+
+<div class="alert alert-primary">
+    <p class="d-flex justify-content-center">Current credit : <strong> @ViewBag.credit </strong> RON.</p>
+</div>
+
+<hr />
+<h3>Details of order: @ViewBag.Orderid</h3>
+<hr />
+
+<table id="table" class="table table-hover">
+    <thead>
+        <tr>
+
+            <th>
+                Photo
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExpDate)
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var photoPath = "~/images/" + item.Product.Image;
+            <tr>
+
+                <td>
+                    <img src=@photoPath asp-append-version="true" width="70" class="img-fluid rounded shadow-sm" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @if (item.ExpDate == null)
+                    {
+                        <p class="text-muted">Not specified</p>
+                    }
+                    else
+                    {
+                        ok = true;
+                        @Html.DisplayFor(modelItem => item.ExpDate)
+
+                    }
+                </td>
+
+
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Index" class="btn btn-primary">Back to Orders</a>
+
+@if (ok)
+{
+    <br />
+    <hr />
+    <label>Add an return</label>
+    <hr />
+    <form class=" m-2" asp-action="Return" asp-controller="Orders">
+        <span class="text-danger">@ViewBag.ErrorMsg</span>
+        <input hidden id="OrderId" name="OrderId" value="@ViewBag.Orderid" />
+        <div class="row">
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label"> Product </label>
+                    <select class="form-control" name="ProductId" id="ProductId" asp-items="ViewBag.Products"></select>
+
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="control-label">Quantity</label>
+                    <input class="form-control" name="Quantity" id="Quantity" type="number" />
+
+                </div>
+            </div>
+
+            <div class="col-md">
+                <div class="form-group">
+                    <label class="form-label"></label>
+                    <textarea rows="3" class="form-control" name="Reason" id="Reason" placeholder="Reason"></textarea>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md">
+                <div class="form-group">
+                    <input type="submit" value="Make an request" class="btn btn-info" />
+                </div>
+            </div>
+        </div>
+    </form>
+}
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable();
+        });
+    </script>
+}

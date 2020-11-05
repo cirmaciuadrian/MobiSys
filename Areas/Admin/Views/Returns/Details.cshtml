@@ -1,0 +1,58 @@
+﻿@model MobiSys.Models.ReturnDetails
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<hr />
+<h3>Return @ViewBag.returnId Details</h3>
+<h4>Order: @ViewBag.orderId</h4>
+<h5>Customer: @ViewBag.customer</h5>
+<hr />
+<div>
+
+
+    <dl class="row">
+        <dt class="col-sm-2">
+            Return:
+        </dt>
+        <dd class="col-sm-10">
+            @ViewBag.returnId
+        </dd>
+        <dt class="col-sm-2">
+            Customer
+        </dt>
+        <dd class="col-sm-10">
+            @ViewBag.customer
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Product):
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Product.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Quantity):
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Reason):
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Reason)
+        </dd>
+    </dl>
+</div>
+<hr />
+<div>
+    <a class="btn btn-outline-info" asp-action="Index" >Back to List</a>
+    @if (Model.Return.ReturnStatusId == 1)
+    {
+        <label> | </label>
+        <a class="btn btn-outline-success"  onclick="return confirm('Are you sure you want to accept this return?');" asp-action="Accept" asp-route-id="@Model.ReturnId">Accept</a>
+        <label> | </label>
+        <a class="btn btn-outline-danger" asp-action="Cancel"  onclick="return confirm('Are you sure you want to cancel this return?');" asp-route-id="@Model.ReturnId">Cancel</a>
+    }
+</div>

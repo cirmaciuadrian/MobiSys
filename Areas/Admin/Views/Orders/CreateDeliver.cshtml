@@ -1,0 +1,69 @@
+﻿@model IList<MobiSys.Areas.Admin.ViewModels.CreateDeliverViewModel>
+
+@{
+    ViewData["Title"] = "Create deliver";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+
+}
+
+
+<h4>Create a deliver for order: @ViewBag.Order</h4>
+<h5>Customer: @ViewBag.customer</h5>
+<hr />
+
+
+<div class="row">
+    <div class="col-md-9">
+
+        @using (Html.BeginForm("Edit", "Orders", FormMethod.Post))
+        {
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+            @Html.AntiForgeryToken()
+
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <div class="form-group row">
+                    @Html.DisplayFor(x => x[i].productName, new { @class = "control-label col-md" }) <text> : </text>
+                    @Html.EditorFor(x => x[i].ExpDate, new { @class = "form-control col-md" })
+                    <label class="text-danger validation-summary-errors">@ViewBag.error</label>
+                    @Html.HiddenFor(x => x[i].productId)
+
+
+
+                </div>
+            }
+            <div class="form-group row">
+                @Html.DisplayNameFor(x => x[Model.Count - 1].ShippingDate) <text> : </text>
+                @Html.EditorFor(x => x[Model.Count - 1].ShippingDate, new { @class = "form-control col-md" })
+                <label class="text-danger validation-summary-errors">@ViewBag.shippingEroor</label>
+            </div>
+            <div class="form-group ">
+                <label class="col-form-label">Coose a car:</label> <text> : </text>
+                @Html.DropDownListFor(x => x[Model.Count - 1].CarId, ViewBag.Cars as IEnumerable<SelectListItem>, "Choose a car", new { @class = "control-label " })
+            <label class="text-danger validation-summary-errors">@ViewBag.carError</label>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" asp-route-id="@ViewBag.Order" value="Save" class="btn btn-primary" /> | <a class="btn btn-secondary" asp-action="Index">Back to orders</a>
+            </div>
+            
+
+        }
+
+
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+@section Scripts
+{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

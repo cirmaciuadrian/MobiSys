@@ -1,0 +1,130 @@
+﻿@model IEnumerable<MobiSys.Models.Orders>
+
+@{
+    ViewData["Title"] = "Orders";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="@TempData["success"] @TempData["danger"]">
+    <p class="d-flex justify-content-center"> <strong> @TempData["Warning"] @TempData["successMsg"] </strong> </p>
+</div>
+
+<h1>All orders</h1>
+<hr />
+
+
+
+<div class="row">
+    <div class="col-md">
+        <a class="btn btn-info" asp-action="ViewPending" asp-area="admin" asp-controller="Orders">Pending </a>
+    </div>
+    <div class="col-md">
+        <a class="btn btn-info" asp-action="ViewAccepted" asp-area="admin" asp-controller="Orders">Accepted </a>
+    </div>
+    <div class="col-md">
+        <a class="btn btn-info" asp-action="ViewCanceled" asp-area="admin" asp-controller="Orders">Canceled </a>
+    </div>
+    <div class="col-md">
+        <a class="btn btn-info" asp-action="ViewDelivered" asp-area="admin" asp-controller="Orders"> Delivered </a>
+    </div>
+    <div class="col-md">
+        <a class="btn btn-info" asp-action="ViewDelivering" asp-area="admin" asp-controller="Orders"> Delivering </a>
+    </div>
+    <div class="col-md">
+        <a class="btn btn-info" asp-action="ViewPaid" asp-area="admin" asp-controller="Orders">  Paid  </a>
+    </div>
+</div>
+<hr />
+
+
+<table id="table" class="table table-info table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DiscountVal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShippingDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Employee)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.OrderStatus)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Id)</a>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id"> @Html.DisplayFor(modelItem => item.Date)</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiscountVal) 
+                    
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalPrice) RON
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ShippingDate)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-controller="Customers" asp-route-id="@item.Customer.Id"> @Html.DisplayFor(modelItem => item.Customer.Company)</a>
+
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Employee.FullName)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderStatus.Status)
+                </td>
+                <td>
+
+                    @if (item.OrderStatus.Status == "Sent") 
+                    {
+
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <label>|</label>
+                        <a asp-action="AcceptOrder" onclick="return confirm('Are you sure you want to accept this order?');" asp-route-id="@item.Id">Accept</a>
+                        <label>|</label>
+                        <a asp-action="CancelOrder" onclick="return confirm('Are you sure you want to cancel this order?');" asp-route-id="@item.Id">Cancel</a>
+                    }
+                    @if (item.OrderStatus.Status == "Accepted")
+                    {
+                        <a asp-action="CancelOrder" onclick="return confirm('Are you sure you want to cancel this order?');" asp-route-id="@item.Id">Cancel</a>
+                        <label>|</label>
+                        <a asp-action="CreateDeliver" asp-route-id="@item.Id">Deliver</a>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable();
+        });
+    </script>
+}

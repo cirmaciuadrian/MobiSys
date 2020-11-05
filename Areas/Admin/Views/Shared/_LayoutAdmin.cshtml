@@ -1,0 +1,129 @@
+﻿
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MobiSys</title>
+
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/dashboard.css">
+    <link href="~/lib/datatables/css/jquery.dataTables.css" rel="stylesheet" />
+    
+
+
+</head>
+<body>
+
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow " id="meniu">
+        <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" asp-area="" asp-controller="Home" asp-action="Index">MobiSys</a>
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button id="logout" type="submit" class="">Logout</button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav id="sidebarMenu" class="col-md-2 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="sidebar-sticky pt-3">
+                    <ul class="nav flex-column">
+
+
+
+
+
+
+                        @if (this.User.IsInRole("Manager") || this.User.IsInRole("Warehouse Team Leader") || this.User.IsInRole("Salesman"))
+                        {
+                            <li class="nav-item"><a class="nav-link " asp-area="Admin" asp-controller="Products" asp-action="Index" as id="products">Products</a></li>
+                            <li class="nav-item"><a class="nav-link " asp-area="Admin" asp-controller="Orders" asp-action="Index" id="Orders">Orders</a></li>
+                            <li class="nav-item"><a class="nav-link " asp-area="Admin" asp-controller="Returns" asp-action="Index" id="Returns">Returns</a></li>
+
+
+
+                        }
+                        @if (this.User.IsInRole("Manager") || this.User.IsInRole("Warehouse Team Leader"))
+                        {
+                            <li class="nav-item"><a class="nav-link " asp-area="Admin" asp-controller="Delivers" asp-action="Index" id="delivers">Delivers</a></li>
+                        }
+                        @if (this.User.IsInRole("Manager") || this.User.IsInRole("Salesman"))
+                        {
+                            <li class="nav-item"><a class="nav-link " asp-area="Admin" asp-controller="Customers" asp-action="Index" id="customers">Customers</a></li>
+                            <li class="nav-item"><a class="nav-link " asp-area="Admin" asp-controller="Vauchers" asp-action="Index" id="Vauchers">Vouchers</a></li>
+                            @*<li class="nav-item"><a class="nav-link " asp-area="Admin" asp-controller="Promotions" asp-action="Index" id="promotions">Promotions</a></li>*@
+                        }
+
+                        @if (this.User.IsInRole("Manager"))
+                        {
+                            <li class="nav-item"><a class="nav-link " asp-area="Admin" asp-controller="Administration" asp-action="Index" id="administration">Administration</a></li>
+                            <li class="nav-item"><a class="nav-link " asp-area="Admin" asp-controller="Employees" asp-action="Index" id="employees">Employees</a></li>
+                            <li class="nav-item"><a class="nav-link " asp-area="Admin" asp-controller="ReturnStatus" asp-action="Index" id="Returnstatus">Return Status</a></li>
+                            @*<li class="nav-item"><a class="nav-link " asp-area="Admin" asp-controller="ProductRepricing" asp-action="Index" id="productrepricing">Old Prices</a></li>*@
+                            <li class="nav-item"><a class="nav-link " asp-area="Admin" asp-controller="OrderStatus" asp-action="Index" id="orderstatus">Order Status</a></li>
+                            <li class="nav-item"><a class="nav-link " asp-area="Admin" asp-controller="Manufacturers" asp-action="Index" id="manufacturers">Manufacturers</a></li>
+                            <li class="nav-item"><a class="nav-link " asp-area="Admin" asp-controller="Cars" asp-action="Index" id="cars">Cars</a></li>
+                            <li class="nav-item"><a class="nav-link " asp-area="Admin" asp-controller="Categories" asp-action="Index" id="categories">Categories</a></li>
+                            <li class="nav-item"><a class="nav-link " asp-area="Admin" asp-controller="Cities" asp-action="Index" id="cities">Cities</a></li>
+                        }
+
+                    </ul>
+
+
+                </div>
+            </nav>
+
+
+
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-4">
+
+                <div class="container">
+                    @RenderBody()
+                </div>
+
+
+            </main>
+
+        </div>
+    </div>
+
+
+
+    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>*@
+
+
+    
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+   
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
+        </script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o">
+        </script>
+    
+    <script src="~/lib/datatables/js/jquery.dataTables.js"></script>
+
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>
+

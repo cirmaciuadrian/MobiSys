@@ -1,0 +1,93 @@
+﻿
+
+
+@model IEnumerable<MobiSys.Areas.Admin.ViewModels.PdfViewModel>
+
+@{
+    ViewData["Title"] = "Deliver Details";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutPdf.cshtml";
+}
+
+
+
+@{
+    int i = 0;
+    @foreach (var item in Model)
+    {
+        if (i == 0)
+        {
+            i = 1;
+            <hr />
+            <div class="row">
+                <p class="col-md">Deliver number:<strong>@Html.DisplayFor(modelItem => item.DeliverId)</strong></p>
+                <p class="col-md">Customer:<strong>@Html.DisplayFor(modelItem => item.Customer)</strong></p>
+                <p class="col-md">Adress: <strong> @Html.DisplayFor(modelItem => item.Adress)</strong></p>
+            </div>
+            <div class="row">
+                <p class="col-md">Order ID:<strong>@Html.DisplayFor(modelItem => item.OrderId)</strong></p>
+                <p class="col-md">Phone: <strong>@Html.DisplayFor(modelItem => item.Phone)</strong></p>
+                <p class="col-md">Car: <strong>>@Html.DisplayFor(modelItem => item.Car)</strong></p>
+            </div>
+            <hr />
+
+        }
+    }
+}
+
+
+
+
+
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Weight)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitsPerBox)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.DeliverId)
+            </th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Weight)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitsPerBox)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeliverId)
+                </td>
+
+
+            </tr>
+        }
+    </tbody>
+</table>

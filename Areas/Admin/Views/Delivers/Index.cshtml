@@ -1,0 +1,81 @@
+﻿@model IEnumerable<MobiSys.Models.Delivers>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="@TempData["success"]">
+    <p class="d-flex justify-content-center"> <strong> @TempData["successMsg"] </strong> </p>
+</div>
+
+<br />
+<h3>Delivers</h3>
+<hr />
+<br />
+<table id="table" class="table table-info table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Car)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Order)
+            </th>
+            <th>
+                Employee
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StatusDeliver)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.Company)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Car.RegistrationPlate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Order.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Employee.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StatusDeliver.Status)
+                </td>
+
+                <td>
+
+                    <a class="btn btn-primary " asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a class="btn btn-secondary " asp-action="ExportPDF" asp-route-id="@item.Id">Export PDF</a>
+
+                    @if (item.StatusDeliver.Status == "Ready")
+                    {
+                        <a class="btn btn-success " asp-action="finishDeliver" asp-route-id="@item.Id">Finish</a>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable();
+        });
+    </script>
+}

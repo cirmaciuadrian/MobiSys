@@ -1,0 +1,118 @@
+﻿@model IEnumerable<MobiSys.Models.Customers>
+
+@{
+    ViewData["Title"] = "Customers";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>List of customers</h1>
+
+
+<br />
+<hr />
+<form asp-controller="Customers" asp-action="Index" method="get" class="row">
+
+    <p>
+        Search: <input type="text" id="SearchString" name="SearchString">
+        Status
+
+        <select name="Accepted" id="Accepted">
+            <option value="all">All</option>
+            <option value="yes">Accepted</option>
+            <option value="no">Pending</option>
+        </select>
+
+        <input type="submit" value="Filter" />
+
+    </p>
+
+</form>
+@ViewBag.Result
+
+<table id="table" class="table  table-hover">
+
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.ContactPerson)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Company)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cui)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Adress)
+            </th>
+
+            <th>
+                Status
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Credit)
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.ContactPerson)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Company)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cui)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Adress)
+                </td>
+
+                <td>
+                    @{ 
+                        string status;
+                        if (item.IsAccepted)
+                        {
+                            status = "Accepted";
+                        }
+                        else status = "Pending";
+                    }
+                    <div class="d-flex justify-content-center">@status</div>
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Credit)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type.Name)
+                </td>
+                <td>
+                    <a class="btn btn-outline-info" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+

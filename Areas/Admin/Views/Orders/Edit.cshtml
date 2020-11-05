@@ -1,0 +1,57 @@
+﻿@model IList<MobiSys.Models.OrderDetails>
+
+@{
+    ViewData["Title"] = "Edit Order";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+
+}
+
+
+<h4>Edit Quantity of products for Order: @ViewBag.Order</h4>
+<h5>Customer: @ViewBag.customer</h5>
+<hr />
+
+
+<div class="row">
+    <div class="col-md-6">
+
+        @using (Html.BeginForm("Edit", "Orders", FormMethod.Post))
+        {
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+            @Html.AntiForgeryToken()
+
+            @for(var i = 0; i < Model.Count; i++)
+            {
+                <div class="form-group">
+                    @Html.DisplayFor(x => x[i].Product.Name, new { @class = "control-label" }) <text> : </text>
+                    @Html.EditorFor(x => x[i].Quantity, new { @class = "form-control" })
+                    @Html.HiddenFor(x => x[i].Id)
+                    @Html.HiddenFor(x => x[i].OrderId)
+                    @Html.HiddenFor(x => x[i].ProductId)
+                   
+                </div>
+            }
+            <div class="form-group">
+                <input type="submit" asp-route-id="@ViewBag.Order" value="Save" class="btn btn-primary" /> | <a class="btn btn-secondary" asp-action="Index">Back to orders</a>
+            </div>
+            <label class="text-danger field-validation-error">@ViewBag.Error</label>
+
+        }
+
+
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+@section Scripts
+{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

@@ -1,0 +1,81 @@
+﻿@model IEnumerable<MobiSys.Models.Returns>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+ <div class="@TempData["Styling"]">
+        <p class="d-flex justify-content-center"> <strong>  @TempData["Msg"] </strong> </p>
+</div>
+
+<h1>Returns</h1>
+
+<hr />
+<table id="table" class="table table-info table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalPrice)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Employee)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.ReturnStatus)
+            </th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                   
+                    <a asp-controller="Customers" asp-action="details" asp-route-id="@item.CustomerId"> @Html.DisplayFor(modelItem => item.Customer.Company)</a>
+                </td>
+                <td>
+                    <a asp-controller="orders" asp-action="details" asp-route-id="@item.OrderId">@Html.DisplayFor(modelItem => item.Order.Id)</a>
+                </td>                
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalPrice) RON
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Employee.FullName)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReturnStatus.Status)
+                </td>
+                <td>
+
+                    <a asp-action="Details" class="btn btn-outline-info" asp-route-id="@item.Id">Details</a>
+                    @if (item.ReturnStatusId==1)
+                    {
+                        <label>|</label>
+                        <a asp-action="Accept" class="btn btn-outline-success"  onclick="return confirm('Are you sure you want to accept this return?');" asp-route-id="@item.Id">Accept</a>
+                        <label>|</label>
+                        <a asp-action="Cancel" class="btn btn-outline-danger"  onclick="return confirm('Are you sure you want to cancel this return?');" asp-route-id="@item.Id">Cancel</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable();
+        });
+    </script>
+}

@@ -1,0 +1,131 @@
+﻿@model IEnumerable<MobiSys.Models.Products>
+
+@{
+    ViewData["Title"] = "Products";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<h1>Products</h1>
+
+<br />
+<br />
+<p>
+    <a class="btn btn-outline-info" asp-action="Create">Add new product</a>
+</p>
+<br />
+<hr />
+
+
+
+<table id="productsTable" class="table table-info table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductCode)
+            </th>
+            <th>
+               
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Weight)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InitialPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Discount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FinalPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.UnitsPerBox)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Cateogry)
+            </th>
+
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductCode)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">@Html.DisplayFor(modelItem => item.Weight)</div>
+
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">@Html.DisplayFor(modelItem => item.InitialPrice)</div>
+
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center"> @Html.DisplayFor(modelItem => item.Discount)</div>
+
+
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center"> @Html.DisplayFor(modelItem => item.FinalPrice)</div>
+
+                </td>
+                <td>
+                    @if (item.Quantity <= item.UnitsPerBox * 10)
+                    {
+                        <div class="d-flex justify-content-center text-danger">  @Html.DisplayFor(modelItem => item.Quantity)</div>
+                    }
+                    else
+                    {
+                        <div class="d-flex justify-content-center">  @Html.DisplayFor(modelItem => item.Quantity)</div>
+                    }
+
+                </td>
+
+                <td>
+                    <div class="d-flex justify-content-center"> @Html.DisplayFor(modelItem => item.UnitsPerBox)</div>
+
+                </td>
+
+                <td>
+                    <div class="d-flex justify-content-center">  @Html.DisplayFor(modelItem => item.Cateogry.Name)</div>
+
+                </td>
+
+
+                <td>
+                    <a class="btn btn-outline-info" asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
+
+                    
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+<br />
+<br />
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#productsTable').DataTable();
+        });
+    </script>
+}
+
+

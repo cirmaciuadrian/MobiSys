@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <ul class="navbar-nav">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            if (this.User.IsInRole("Manager")) 
+            {
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="Admin" asp-controller="Dashboard" asp-action="Index" title="Dashboard">Dashboard</a>
+                </li>
+
+
+            }
+            if (this.User.IsInRole("Customer"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-controller="CartDetails" asp-action="Index" title="Dashboard"><i class="fa fa-shopping-cart" style="font-size:28px"></i></a>
+                </li>
+            }
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
+            </li>
+            <li class="nav-item">
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                </form>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            </li>
+        }
+    </ul>

@@ -1,0 +1,199 @@
+﻿@model IEnumerable<Products>
+
+@{
+    Products product = new Products();
+    foreach (var item in Model)
+    {
+        if (item.Id == ViewBag.ProductId)
+        {
+            product = item;
+        }
+    }
+
+    ViewData["Title"] = "Product Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var photoPath = "~/images/" + product.Image;
+}
+
+
+<div class="@TempData["success"] @TempData["danger"]">
+    <p class="d-flex justify-content-center"> <strong> @TempData["WarningQuantityInput"] @TempData["SuccesQuantityInput"] </strong> </p>
+</div>
+
+
+
+<div class="container">
+
+
+    <h1 class="my-4">
+        @product.Name
+        <small>@product.Weight @product.Um.Name </small>
+    </h1>
+
+
+    <div class="row ">
+
+        <div class="container fluid col-md">
+
+            <img class="img-fluid responsive" src=@photoPath asp-append-version="true" />
+        </div>
+
+        <div class="container  col-md">
+            <h3 class="my-3">Product Details</h3>
+            <dl>
+                <div class="row">
+
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.ProductCode)
+                    </dt>
+                    <dd class="col-sm-5">
+                        @product.ProductCode
+                    </dd>
+
+                </div>
+
+                <div class="row">
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.Name)
+                    </dt>
+                    <dd class="col-sm-5">
+                        @product.Name
+                    </dd>
+                </div>
+
+                <div class="row">
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.Weight)
+                    </dt>
+                    <dd class="col-sm-5">
+                        @product.Weight @product.Um.Name
+                    </dd>
+                </div>
+
+                <div class="row">
+                    <dt class="col-sm-3">
+                        @Html.DisplayNameFor(model => model.UnitsPerBox)
+                    </dt>
+                    <dd class="col-sm-5">
+                        @product.UnitsPerBox
+                    </dd>
+                </div>
+
+
+            </dl>
+            <hr />
+            <h3>Product Description</h3>
+            <p>@product.Details</p>
+            <hr />
+            <div class="row container">
+
+                <div class="col-md">
+                    <div class="price-wrap h5">
+
+                        <span class="price-new row">@product.FinalPrice RON</span>
+                        @if (product.InitialPrice > product.FinalPrice)
+                        {
+                            <del class="price-old text-muted row">@product.InitialPrice RON</del><br />
+                        }
+                        else
+                        {
+                            <span></span><br />
+                        }
+                        @if (product.Quantity < product.UnitsPerBox * 10)
+                        {
+                            <label class="text-warning"><small>@ViewBag.WarningQuantity</small></label>
+                        }
+                    </div>
+
+
+                </div>
+                <div class="col-md">
+
+                    <form asp-action="AddToCart" method="post">
+
+                        <input type="number" hidden value="@product.Id" />
+                        <input type="number" class="form-control m-1" id="quantityInput" name="quantityInput" placeholder="Quantity" required value="@ViewBag.QuantityInput">
+                        <input class="btn btn-outline-danger form-control m-1" asp-action="AddToCart" asp-route-id="@product.Id" type="submit" value="Add To Cart" />
+                        <span class="text-danger"><small>@TempData["WarningQuantityInput"] </small></span>
+                    </form>
+
+
+                </div>
+                <div class="col-md">
+                    <p class="info">
+                        If you buy whole boxes you gain 5% discount
+                    </p>
+                    <span class="text-success">@TempData["SuccesQuantityInput"]</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <hr />
+    <br />
+    <h3>Similar Products</h3>
+
+
+    <div class="row mt-5">
+        @{
+            int i = 0;
+
+            foreach (var products in Model)
+            {
+
+                if (i <= 3 && product.CateogryId == products.CateogryId && product.Id != products.Id)
+                {
+                    i++;
+
+                    photoPath = "~/images/" + products.Image;
+
+
+                    <div class="col-md-3">
+                        <figure class="card card-product">
+                            <div class="img-wrap">  <img src=@photoPath asp-append-version="true" /></div>
+                            <figcaption class="info-wrap">
+                                <h5 class="title"> @products.Name</h5>
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <p class="desc  d-flex justify-content-start">@products.Weight @products.Um.Name</p>
+                                    </div>
+                                    <div class="col-sm">
+                                        <p class=" d-flex justify-content-end">@products.Manufacturer.Name</p>
+                                    </div>
+                                </div>
+
+                            </figcaption>
+                            <div class="bottom-wrap">
+                                <a asp-action="Details" asp-route-id="@products.Id" class="btn btn-sm btn-danger float-right">Order Now</a>
+                                <div class="price-wrap h5">
+
+                                    <span class="price-new">@products.FinalPrice RON</span><br />
+                                    @if (products.InitialPrice > products.FinalPrice)
+                                    {
+                                        <del class="price-old ">@products.InitialPrice RON</del><br />
+                                    }
+                                    else
+                                    {
+                                        <span></span><br />
+                                    }
+
+
+
+                                </div>
+                            </div>
+                        </figure>
+                    </div>
+                }
+
+            }
+        }
+
+
+
+    </div>
+
+
+
+    <a asp-action="Index">Back to All Products</a>
+</div>

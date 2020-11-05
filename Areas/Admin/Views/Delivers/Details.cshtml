@@ -1,0 +1,78 @@
+﻿@model IEnumerable<MobiSys.Models.DeliverDetails>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+
+}
+
+
+<hr />
+<div class="row">
+    <p class="col-md">Deliver number:<strong> @Html.Raw(ViewBag.Content[0])</strong></p>
+    <p class="col-md">Customer:<strong>@Html.Raw(ViewBag.Content[1])</strong></p>
+    <p class="col-md">Adress: <strong> @Html.Raw(ViewBag.Content[2])</strong></p>
+</div>
+<div class="row">
+    <p class="col-md">Order ID:<strong> @Html.Raw(ViewBag.Content[3])</strong></p>
+    <p class="col-md">Phone: <strong>@Html.Raw(ViewBag.Content[5])</strong></p>
+    <p class="col-md">Car: <strong> @Html.Raw(ViewBag.Content[4])</strong></p>
+</div>
+<hr />
+
+
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Product)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product.Weight)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product.UnitsPerBox)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Deliver)
+            </th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Weight)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.UnitsPerBox)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Deliver.Id)
+                </td>
+
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+

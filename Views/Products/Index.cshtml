@@ -1,0 +1,102 @@
+﻿@model IEnumerable<Products>
+
+@{
+    ViewData["Title"] = "Products";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+
+
+
+    <div class="row">
+
+
+        <img class="m-6 responsive" src="~/images/products-banner.png" />
+
+    </div>
+    <hr>
+    <form asp-controller="Products" asp-action="Index" method="get">
+        <div class="row">
+
+            <div class="form-group col-md-2">
+                <label class="control-label row justify-content-center">Filters:</label>
+                
+                    <input class="btn btn-primary form-control" type="submit" value="Filter" />
+ 
+                <label class="text-info row justify-content-center">@ViewBag.Results</label>
+            </div>
+
+            <div class="form-group col-md">
+                <label class="control-label">Product Name</label>
+                <input type="text" class="form-control" id="filterName" name="filterName" value="@ViewBag.filterName">
+            </div>
+
+
+            <div class="form-group col-md">
+                <label class="control-label">Category</label>
+                <select class="form-control" id="filterCategory" name="filterCategory" asp-items="@ViewBag.Category"></select>
+            </div>
+
+            <div class="form-group col-md">
+                <label class="control-label">Manufacturer</label>
+                <select class="form-control" id="filterManufacturer" name="filterManufacturer" asp-items="@ViewBag.Manufacturer"></select>
+            </div>
+
+
+        </div>
+    </form>
+    <hr>
+    <div class="row">
+        @foreach (var product in Model)
+        {
+            if (product.Quantity >= product.UnitsPerBox)
+            {
+                var photoPath = "~/images/" + product.Image;
+
+
+                <div class="col-md-3">
+                    <figure class="card card-product">
+                        <div class="img-wrap">  <img src=@photoPath asp-append-version="true" /></div>
+                        <figcaption class="info-wrap">
+                            <h5 class="title"> @product.Name</h5>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <p class="desc  d-flex justify-content-start">@product.Weight @product.Um.Name</p>
+                                </div>
+                                <div class="col-sm">
+                                    <p class=" d-flex justify-content-end">@product.Manufacturer.Name</p>
+                                </div>
+                            </div>
+
+                        </figcaption>
+                        <div class="bottom-wrap">
+                            <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-sm btn-danger float-right">Order Now</a>
+                            <div class="price-wrap h5">
+
+                                <span class="price-new">@product.FinalPrice RON</span><br />
+                                @if (product.InitialPrice > product.FinalPrice)
+                                {
+                                    <del class="price-old ">@product.InitialPrice RON</del><br />
+                                }
+                                else
+                                {
+                                    <span></span><br />
+                                }
+
+
+
+                            </div>
+                        </div>
+                    </figure>
+                </div>
+            }
+
+        }
+
+
+
+
+    </div>
+</div>

@@ -1,0 +1,53 @@
+﻿@model IEnumerable<IdentityRole>
+@{
+    ViewBag.Title = "All Roles";
+    Layout = "_LayoutAdmin";
+}
+
+<h1>All Jobs</h1>
+
+<a class="btn btn-outline-success mb-3" style="width:auto" asp-action="CreateRole" asp-controller="administration"> Add new role</a>
+
+@if (Model.Any())
+{
+    @foreach (var role in Model)
+    {
+
+        <div class="card mb-3">
+            <div class="card-header">
+                Role ID : @role.Id
+
+            </div>
+            <div class="card-body">
+                <h5 class=" card-title">@role.Name</h5>
+
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-info" asp-action="EditRole" asp-controller="Administration" asp-route-id="@role.Id">View users</a>
+                
+            </div>
+        </div>
+
+    }
+
+}
+else
+{
+    <div class="card">
+        <div class="card-header">
+            No roles created yet
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+            </h5>
+
+            <a class="btn btn-primary" style="width:auto"
+               asp-controller="Administration" asp-action="CreateRole">
+                Create Role
+            </a>
+        </div>
+    </div>
+}
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

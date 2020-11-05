@@ -1,0 +1,226 @@
+﻿@model MobiSys.Areas.Admin.ViewModels.EditProductViewModel
+
+@{
+    ViewData["Title"] = "Edit product";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    var photoPath = "~/images/" + (Model.Image ?? "no-image.jpg");
+}
+
+
+<h4>Edit  @Html.DisplayFor(m => m.Name) </h4>
+<hr />
+<form asp-action="Edit" enctype="multipart/form-data">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="Image" />
+    <div class="row">
+
+        <div class="col-md">
+
+
+
+            <div class="form-group">
+                <label asp-for="ProductCode" class="control-label"></label>
+                <input asp-for="ProductCode" class="form-control" />
+                <span asp-validation-for="ProductCode" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md">
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md">
+            <div class="form-group">
+                <label asp-for="InitialPrice" class="control-label"></label>
+                <input asp-for="InitialPrice"  oninput="f1()" class="form-control" />
+                <span asp-validation-for="InitialPrice" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md">
+            <div class="form-group">
+                <label asp-for="Discount" class="control-label"></label>
+                <input asp-for="Discount" oninput="f1()" class="form-control" />
+                <span asp-validation-for="Discount" class="text-danger"></span>
+                <span id="discountSpan" class="text-danger"></span>
+
+            </div>
+        </div>
+
+        <div class="col-md">
+            <div class="form-group">
+                <label asp-for="FinalPrice" class="control-label"></label>
+                <input asp-for="FinalPrice" disabled="disabled" class="form-control" />
+                <span asp-validation-for="FinalPrice" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md">
+            <div class="form-group">
+                <label asp-for="Weight" class="control-label"></label>
+                <input asp-for="Weight" class="form-control" />
+                <span asp-validation-for="Weight" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md">
+            <div class="form-group">
+                <label asp-for="UmId" class="control-label"></label>
+                <select asp-for="UmId" class="form-control" asp-items="ViewBag.UmId"></select>
+                <span asp-validation-for="UmId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-group">
+                <label asp-for="UnitsPerBox" class="control-label"></label>
+                <input asp-for="UnitsPerBox" class="form-control" />
+                <span asp-validation-for="UnitsPerBox" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+
+        <div class="col-md">
+            <div class="form-group">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md">
+            <div class="form-group">
+                <label asp-for="CateogryId" class="control-label"></label>
+                <select asp-for="CateogryId" class="form-control" asp-items="ViewBag.CateogryId"></select>
+                <span asp-validation-for="CateogryId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md">
+            <div class="form-group">
+                <label asp-for="ManufacturerId" class="control-label"></label>
+                <select asp-for="ManufacturerId" class="form-control" asp-items="ViewBag.ManufacturerId"></select>
+                <span asp-validation-for="ManufacturerId" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md">
+            <label asp-for="Details" class="col-sm-2 col-form-label"></label>
+            <textarea asp-for="Details" rows="3" class="form-control" placeholder="Details"></textarea>
+            <span asp-validation-for="Details" class="text-danger"></span>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+
+        <div class="col-md m-5">
+            <div class="form-group">
+                <div class="custom-file">
+                    <input asp-for="photo" onchange="loadFile(event)" class="form-control custom-file-input" />
+                    <label class="custom-file-label">Choose file...</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </div>
+        <div class="col-md m-5">
+            <div class="form-group">
+                <img alt="Current Image" id="output" width="150" height="150" src=@photoPath asp-append-version="true" />
+
+            </div>
+        </div>
+    </div>
+
+
+</form>
+
+
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script>
+        $(document).ready(function () {
+            $('.custom-file-input').on("change", function () {
+                var fileName = $(this).val().split("\\").pop();
+                $(this).next('.custom-file-label').html(fileName);
+            });
+        });
+
+
+    </script>
+    <script>
+        var loadFile = function (event) {
+            var output = document.getElementById('output');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function () {
+                URL.revokeObjectURL(output.src)
+            }
+        };
+    </script>
+
+    <script>
+        //InitialPrice
+        //Discount
+        //FinalPrice
+        function f1() {
+            let ipValue = $("#InitialPrice").val();
+            let discValue = $("#Discount").val();
+
+
+            if (ipValue.length > 0) {
+                document.getElementById("FinalPrice").disabled = true
+
+                if (parseFloat(discValue) > parseFloat(ipValue)) {
+                    $("#discountSpan").show();
+                    $("#FinalPrice").val("")
+                    $("#discountSpan").html("Discount need to be lower then Initial price")
+                }
+                else {
+                    $("#discountSpan").hide();
+                    $("#FinalPrice").val(finalPrice(ipValue, discValue))
+                }
+
+            } else {
+                document.getElementById("FinalPrice").disabled = false
+            }
+        }
+
+
+
+
+
+        function finalPrice(initialPrice, discount) {
+
+            if (discount == 0 || discount.length == 0) {
+                return initialPrice;
+            }
+
+            return parseFloat(parseFloat(initialPrice) - parseFloat(discount)).toFixed(2);
+
+        }
+    </script>
+}
+

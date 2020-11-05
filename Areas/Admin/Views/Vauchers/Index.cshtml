@@ -1,0 +1,112 @@
+﻿@model IEnumerable<MobiSys.Models.Vauchers>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+
+
+
+<div class="@TempData["Styling"]">
+    <p class="d-flex justify-content-center"> <strong>  @TempData["Msg"] </strong> </p>
+</div>
+
+
+<div class="container-fluid row mb-5">
+
+
+    <div class="col-sm border-right border-bottom">
+
+        <partial name="_Percentage" model="new MobiSys.Areas.Admin.ViewModels.PercentageModelView()" />
+    </div>
+
+    <div class="col-sm border-left border-bottom">
+        <partial name="_Value" model="new MobiSys.Areas.Admin.ViewModels.ValueModelView()" />
+    </div>
+
+
+</div>
+
+
+
+<table id="vaucherTable" class="table table-hover">
+    <thead>
+
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Percentage)  %
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Value)  RON
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsUsed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer)
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <div class="d-flex justify-content-center">@Html.DisplayFor(modelItem => item.Code)</div>
+
+                </td>
+                <td>
+
+                    <div class="d-flex justify-content-center">@Html.DisplayFor(modelItem => item.Percentage)</div>
+
+
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center"> @Html.DisplayFor(modelItem => item.Value) </div>
+
+
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">@Html.DisplayFor(modelItem => item.IsUsed)</div>
+
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">@Html.DisplayFor(modelItem => item.CreatedByNavigation.FullName)  </div>
+
+
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center"> @Html.DisplayFor(modelItem => item.Customer.Company)  </div>
+
+                </td>
+              
+                <td>
+                    <a class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to disable this vaucher?');" asp-action="DisableVoucher" asp-route-id="@item.Id">Disable</a>
+
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            $('#vaucherTable').DataTable();
+        });
+    </script>
+}

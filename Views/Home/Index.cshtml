@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@if (this.User.IsInRole("User") || this.User.IsInRole("Customer"))
+{
+
+    <div class="text-center">
+        <img src="~/images/home.jpg" class="m-6 responsive" />
+        <h1 class="display-3">We are here to make your job easier</h1>
+
+    </div>
+
+}
+else
+{
+
+    <div class="text-center">
+        <img src="~/images/home.jpg" class="m-6 responsive" />
+        <h1 class="display-3">We are here to make your job easier</h1>
+
+    </div>
+    <a class="btn btn-outline-success m-5" asp-controller="Profile">Please finish the registration</a>
+}
+

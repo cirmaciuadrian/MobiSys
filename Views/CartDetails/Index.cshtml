@@ -1,0 +1,146 @@
+﻿@model IEnumerable<MobiSys.Models.CartDetails>
+
+@{
+    ViewData["Title"] = "Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<div class="px-4 px-lg-0 container-fluid">
+    <div class="alert alert-primary">
+        <p class="d-flex justify-content-center">Current credit : <strong> @ViewBag.credit </strong> RON.</p>
+    </div>
+
+    <div class="pb-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 p-5 bg-white rounded shadow-sm mb-5">
+
+
+                    <div class="table-responsive">
+                        <table class="table ">
+                            <thead>
+                                <tr>
+
+                                    <th scope="col" class="border-0 bg-info">
+                                        <div class="p-2 px-3 text-uppercase">Product</div>
+                                    </th>
+                                    <th scope="col" class="border-0 bg-info">
+                                        <div class="py-2 text-uppercase">Units/Box</div>
+                                    </th>
+                                    <th scope="col" class="border-0 bg-info">
+                                        <div class="py-2 text-uppercase">Price</div>
+                                    </th>
+                                    <th scope="col" class="border-0 bg-info">
+                                        <div class="py-2 text-uppercase">Quantity</div>
+                                    </th>
+                                    <th scope="col" class="border-0 bg-info">
+                                        <div class="py-2 text-uppercase">Remove</div>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            @foreach (var item in Model)
+                            {
+                                var photoPath = "~/images/" + item.Product.Image;
+                                <tbody>
+                                    <tr>
+                                        <th scope="row" class="border-0">
+                                            <div class="p-2">
+
+                                                <img src=@photoPath asp-append-version="true" width="70" class="img-fluid rounded shadow-sm" />
+                                                <div class="ml-3 d-inline-block align-middle">
+                                                    <h5 class="mb-0"> <a asp-controller="Products" asp-action="Details" asp-route-id="@item.ProductId" class="text-dark d-inline-block align-middle">@item.Product.Name</a></h5>
+
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <td class="border-0 align-middle"><strong>@item.Product.UnitsPerBox</strong></td>
+                                        <td class="border-0 align-middle"><strong>@item.Product.FinalPrice RON</strong></td>
+                                        <td class="border-0 align-middle"><strong>@item.Quantity</strong></td>
+                                        <td class="border-0 align-middle"><a asp-action="Delete" onclick="return confirm('Are you sure you want to delete this item?');" asp-route-id="@item.Id" class="text-dark"><i class="fa fa-trash"></i></a></td>
+                                    </tr>
+
+                                </tbody>
+                            }
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row py-5 p-4 bg-white shadow-sm">
+
+                <div class="col-lg-6 border ">
+                    <form asp-action="UseVaucher">
+                        <div class="bg-info pill px-4 py-3 text-uppercase font-weight-bold">Vouchers</div>
+                        <div class="p-4">
+                            <p class=" mb-4">If you have a Voucher code, please enter it in the box below</p>
+                            <p class=" mb-4"><strong>Use Vouchers only wehn you want to check-out</strong>,because if you use vouchers and remove some products  from the cart, you will lose the discounts. </p>
+                            <div class="input-group mb-4 border rounded-pill p-2">
+
+                                <input type="text" name="vaucherInput" placeholder="Apply coupon" aria-describedby="button-addon3" class="form-control border-0" />
+                                <button id="button-addon3" asp-action="UseVaucher" type="submit" class="btn btn-dark px-4 rounded-pill"><i class="fa fa-gift mr-2"></i>Apply Voucher</button>
+
+                            </div>
+                            <label class="text-danger field-validation-error">@TempData["error"]</label>
+                            <label class="text-success field-validation-error">@TempData["succes"]</label>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+                <div class="col-lg-6 border">
+                    <div class="bg-info px-4 py-3 text-uppercase font-weight-bold">Order summary </div>
+                    <div class="p-4">
+
+                        <ul class="list-unstyled mb-4">
+                            <li class="d-flex justify-content-between py-3 border-bottom">
+                                <strong class="text-muted">Subtotal </strong>
+                                <strong>@ViewBag.subtotal RON</strong>
+                            </li>
+                            @if (ViewBag.discPackage>0)
+                            {
+                                <li class="d-flex justify-content-between py-3 border-bottom">
+                                    <strong class="text-muted">Full Pack Discount </strong>
+                                    <strong>- @ViewBag.discPackage RON</strong>
+                                </li>
+                            }
+                            @if (ViewBag.discountVal > 0)
+                            {
+                                <li class="d-flex justify-content-between py-3 border-bottom">
+                                    <strong class="text-muted">Value Voucher</strong>
+                                    <strong>-@ViewBag.discountVal RON</strong>
+                                </li>
+                            }
+                            @if (ViewBag.discountPer > 0)
+                            {
+                                <li class="d-flex justify-content-between py-3 border-bottom">
+                                    <strong class="text-muted">Percentage Voucher</strong>
+                                    <strong>-@ViewBag.discountPer % </strong>
+                                </li>
+                            }
+                            <li class="d-flex justify-content-between py-3 border-bottom">
+                                <strong class="text-muted">Total</strong>
+                                <h5 class="font-weight-bold">@ViewBag.total</h5>
+                            </li>
+                        </ul><a asp-action="CheckOut" class="btn btn-dark rounded-pill py-2 btn-block">Checkout</a>
+                             <label class="text-danger field-validation-error">@TempData["CartMessage"]</label>
+                        
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

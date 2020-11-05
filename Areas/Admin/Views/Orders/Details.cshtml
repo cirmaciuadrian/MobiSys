@@ -1,0 +1,75 @@
+﻿@model IEnumerable<MobiSys.Models.OrderDetails>
+
+@{
+    ViewData["Title"] = "Order details";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Order Info</h1>
+
+<hr />
+<br />
+
+
+<table id="table" class="table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Product)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DiscountPer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExpDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order)
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiscountPer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExpDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Order.Id)
+                </td>
+
+               
+            </tr>
+        }
+    </tbody>
+</table>
+<hr />
+<a asp-action="index" class="btn btn-primary">Back to Orders</a>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable();
+        });
+    </script>
+}

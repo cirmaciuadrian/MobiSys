@@ -1,0 +1,166 @@
+﻿@model IEnumerable<MobiSys.Models.Orders>
+
+@{
+    ViewData["Title"] = "My Orders";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<div class="@TempData["Styling"]">
+    <p class="d-flex justify-content-center"> <strong>  @TempData["Msg"] </strong> </p>
+</div>
+<div class="alert rounded shadow alert-primary">
+    <p class="d-flex justify-content-center">Current credit : <strong> @ViewBag.credit </strong> RON.</p>
+</div>
+
+@{
+    int i = 0;
+    foreach (var item in ViewBag.eorderId)
+    {
+
+        if (item == 0)
+        {
+
+        }
+        else
+        {
+            <div class="alert alert-danger rounded shadow alert-dismissible fade show">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Danger! </strong>@ViewBag.eproductName[i] from order <a asp-action="details" asp-route-id="@ViewBag.eorderId[i]">@ViewBag.eorderId[i]</a>  expired on  @ViewBag.edateExp[i].
+            </div>
+            i++;
+        }
+    }
+    i = 0;
+    foreach (var item in ViewBag.orderId)
+    {
+        if (item == 0)
+        {
+
+        }
+        else
+        {
+                <div class="alert alert-warning rounded shadow alert-dismissible fade show">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Warning! </strong>@Html.Raw(ViewBag.productName[i])   from order <a asp-action="details" asp-route-id="@ViewBag.orderId[i]"> @Html.Raw(ViewBag.orderId[i])</a> will expire on @Html.Raw(ViewBag.dateExp[i]).
+                </div>
+                i++;
+            }
+
+        }
+
+    }
+
+
+
+
+
+<br />
+<h1>My orders</h1>
+<hr />
+@ViewBag.succes
+<table id="table" class="table table-hover">
+
+    <thead class="rounded shadow bg-info">
+        <tr>
+            <th>
+                Order Id
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DiscountVal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShippingDate)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.OrderStatus)
+            </th>
+            <th>
+                Payments
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @if (item.DiscountVal > 0)
+                    {
+                        @Html.DisplayFor(modelItem => item.DiscountVal) <label>RON</label>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalPrice) RON
+                </td>
+                <td>
+                    @if (item.ShippingDate == null)
+                    {
+                        <p class="text-muted">
+                            Not Specified
+                        </p>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.ShippingDate)
+                    }
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderStatus.Status)
+                </td>
+                <td>
+                    @if (item.isPaid)
+                    {
+                        <p class="tex-success text-muted">Paid</p>
+                    }
+                    else
+                    {
+                        <p class="text-warning text-muted">UnPaid</p>
+                    }
+
+                </td>
+                <td>
+                    <div class="row">
+                        <a asp-action="Details" class="btn btn-outline-primary col-sm" asp-route-id="@item.Id">Details</a>
+                        @if (item.OrderStatus.Status.Contains("Delivered")|| item.OrderStatus.Status.Contains("Paid"))
+                        {
+                            <lable>|</lable>
+                            <a asp-action="Details" class="btn btn-outline-secondary col-sm" asp-route-id="@item.Id">Return</a>
+                            if (item.isPaid != true)
+                            {
+                                <lable>|</lable>
+                                <form method="post">
+                                    <input class="btn btn-outline-danger col-sm" asp-action="payment" asp-route-id="@item.Id" type="submit" value="Pay" />
+                                </form>
+                                @*<a asp-action="payment" class="btn btn-outline-success col-sm" asp-route-id="@item.Id">Pay</a>*@
+                            }
+                        }
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable();
+        });
+    </script>
+}
